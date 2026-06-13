@@ -6,61 +6,98 @@
     <title>MindRhythm</title>
     <style>
       :root {
-        --ink: #183033;
-        --muted: #587276;
-        --sea: #147c7b;
-        --aqua: #c9f6f1;
-        --sky: #bde7ff;
-        --mist: #f4fffc;
-        --sage: #e7f3e8;
+        --ink: #143033;
+        --muted: #5d7679;
+        --sea: #117b7b;
+        --aqua: #bef8ee;
+        --sky: #b8e9ff;
+        --mist: #f7fffd;
+        --sage: #e7f8e9;
         --sun: #ffe98a;
         --orange: #ffb25f;
         --coral: #e87561;
-        --line: rgba(20, 124, 123, 0.16);
+        --line: rgba(28, 151, 147, 0.2);
+        --glass: rgba(255, 255, 255, 0.58);
+        --glass-strong: rgba(255, 255, 255, 0.78);
+        --shine: rgba(255, 255, 255, 0.72);
       }
       * { box-sizing: border-box; }
+      html { min-height: 100%; }
       body {
+        position: relative;
         margin: 0;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at 9% 8%, rgba(255, 255, 255, 0.96), transparent 17rem),
-          radial-gradient(circle at 96% 16%, rgba(122, 200, 255, 0.38), transparent 20rem),
-          radial-gradient(circle at 82% 88%, rgba(255, 228, 121, 0.24), transparent 24rem),
-          radial-gradient(circle at 26% 76%, rgba(130, 241, 213, 0.26), transparent 18rem),
-          linear-gradient(125deg, #effff7 0%, #faffff 44%, #d7efff 100%);
+          radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.98), transparent 16rem),
+          radial-gradient(circle at 94% 12%, rgba(111, 203, 255, 0.48), transparent 22rem),
+          radial-gradient(circle at 78% 86%, rgba(255, 232, 120, 0.28), transparent 24rem),
+          radial-gradient(circle at 24% 75%, rgba(87, 239, 211, 0.33), transparent 21rem),
+          radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.52), transparent 28rem),
+          linear-gradient(130deg, #e7fff4 0%, #fbffff 42%, #d5f0ff 100%);
+        background-attachment: fixed;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+          linear-gradient(115deg, rgba(255,255,255,.46), transparent 34%),
+          radial-gradient(ellipse at 15% 100%, rgba(59, 200, 179, .16), transparent 42%),
+          radial-gradient(ellipse at 100% 78%, rgba(113, 189, 255, .22), transparent 36%);
       }
       header {
         position: sticky;
         top: 0;
         z-index: 10;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.92);
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(235, 255, 252, 0.72));
-        backdrop-filter: blur(18px) saturate(1.35);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.86);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(220, 255, 250, 0.58));
+        box-shadow: 0 14px 42px rgba(35, 128, 133, 0.09), inset 0 -1px 0 rgba(255,255,255,.75);
+        backdrop-filter: blur(22px) saturate(1.5);
       }
       nav, main, footer { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
       nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 16px; }
-      .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+      .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; color: #126f70; text-shadow: 0 1px 0 rgba(255,255,255,.9); }
       .logo {
         position: relative;
-        display: grid;
-        place-items: center;
-        width: 42px;
-        height: 42px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 5px;
+        width: 48px;
+        height: 48px;
+        padding: 10px 9px 9px;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,.9);
-        border-radius: 15px;
-        color: white;
+        border: 1px solid rgba(255,255,255,.98);
+        border-radius: 17px;
         background:
-          radial-gradient(circle at 30% 22%, rgba(255,255,255,.95), rgba(255,255,255,.2) 18%, transparent 34%),
-          linear-gradient(145deg, #32c7bd, #0e7377 58%, #65b7ff);
-        box-shadow: inset 0 1px 12px rgba(255,255,255,.5), 0 14px 34px rgba(20,124,123,.28);
+          radial-gradient(circle at 28% 18%, rgba(255,255,255,.74), rgba(255,255,255,.18) 22%, transparent 38%),
+          radial-gradient(circle at 78% 78%, rgba(170, 255, 169, .34), transparent 42%),
+          linear-gradient(145deg, #1ab4bd 0%, #3ecfb5 48%, #86dd86 100%);
+        box-shadow:
+          inset 0 2px 14px rgba(255,255,255,.55),
+          inset 0 -16px 24px rgba(0, 112, 123, .12),
+          0 16px 38px rgba(16, 119, 124, .24);
       }
-      .logo::after { content: ""; position: absolute; inset: auto -8px -20px; height: 30px; background: rgba(255,255,255,.28); transform: rotate(-8deg); }
-      .logo span { position: relative; z-index: 1; letter-spacing: -0.08em; }
-      .navlinks { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,0.72); }
-      .navlinks button { border: 0; background: transparent; color: var(--muted); border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 800; }
-      .navlinks button:hover, .navlinks button.active-tab { background: linear-gradient(180deg, #2fb8ad, var(--sea)); color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,.45); }
+      .logo::before { content: ""; position: absolute; inset: 4px 5px auto; height: 18px; border-radius: 999px; background: linear-gradient(180deg, rgba(255,255,255,.58), rgba(255,255,255,0)); }
+      .logo::after { content: ""; position: absolute; inset: auto -8px -18px; height: 28px; background: rgba(255,255,255,.22); transform: rotate(-7deg); }
+      .logo-bar {
+        position: relative;
+        z-index: 1;
+        display: block;
+        width: 8px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #ffffff, #f6ffff);
+        box-shadow: 0 2px 8px rgba(19, 105, 112, .2), inset 0 1px 2px rgba(255,255,255,.95);
+      }
+      .logo-bar:nth-child(1) { height: 21px; }
+      .logo-bar:nth-child(2) { height: 31px; }
+      .logo-bar:nth-child(3) { height: 25px; }
+      .navlinks { display: flex; gap: 8px; flex-wrap: wrap; padding: 7px; border: 1px solid rgba(255,255,255,.92); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(224,255,250,.52)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 10px 28px rgba(36, 126, 132, .08); }
+      .navlinks button { border: 1px solid transparent; background: transparent; color: var(--muted); border-radius: 13px; padding: 10px 14px; cursor: pointer; font-weight: 900; }
+      .navlinks button:hover, .navlinks button.active-tab { border-color: rgba(255,255,255,.88); background: linear-gradient(180deg, #5ee4d2, var(--sea)); color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,.58), 0 8px 20px rgba(18,124,124,.22); }
       .view { display: none; padding: 42px 0; }
       .view.active { display: block; }
       .hero { min-height: calc(100vh - 86px); display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 42px; align-items: center; }
@@ -71,31 +108,37 @@
       .lead { max-width: 680px; font-size: 18px; }
       .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
       button, .button {
-        border: 0;
-        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,.72);
+        border-radius: 16px;
         padding: 13px 18px;
         font-weight: 800;
         cursor: pointer;
         transition: 160ms ease;
       }
-      .primary { background: linear-gradient(180deg, #2fb8ad, var(--sea)); color: white; box-shadow: 0 16px 50px rgba(24, 48, 51, 0.08), inset 0 1px 0 rgba(255,255,255,.42); }
-      .primary:hover { background: var(--ink); }
-      .secondary { border: 1px solid rgba(255,255,255,.95); background: linear-gradient(180deg, white, #f0fffc); color: var(--sea); }
-      .secondary:hover { background: var(--aqua); }
+      .primary { background: linear-gradient(180deg, #61ead5 0%, #20a8a4 58%, #117577 100%); color: white; box-shadow: 0 16px 42px rgba(19, 137, 136, 0.22), inset 0 2px 0 rgba(255,255,255,.55), inset 0 -10px 20px rgba(0,82,92,.12); text-shadow: 0 1px 0 rgba(0,73,80,.3); }
+      .primary:hover { filter: saturate(1.08) brightness(.98); transform: translateY(-1px); }
+      .secondary { border: 1px solid rgba(255,255,255,.96); background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(222,255,249,.76)); color: var(--sea); box-shadow: inset 0 1px 0 white, 0 10px 28px rgba(39, 130, 135, .08); }
+      .secondary:hover { background: linear-gradient(180deg, white, #cdf9f1); transform: translateY(-1px); }
       .card {
-        border: 1px solid rgba(255, 255, 255, 0.96);
-        border-radius: 20px;
-        background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(244,255,252,.72));
-        box-shadow: 0 20px 60px rgba(24, 48, 51, 0.09), inset 0 1px 0 rgba(255,255,255,.85);
-        backdrop-filter: blur(15px) saturate(1.25);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.94);
+        border-radius: 24px;
+        background:
+          linear-gradient(145deg, rgba(255,255,255,.82), rgba(232,255,251,.6)),
+          radial-gradient(circle at 18% 0%, rgba(255,255,255,.88), transparent 38%);
+        box-shadow: 0 24px 70px rgba(36, 105, 111, 0.13), inset 0 1px 0 rgba(255,255,255,.96), inset 0 -18px 34px rgba(95, 210, 200, .08);
+        backdrop-filter: blur(18px) saturate(1.38);
         padding: 22px;
       }
-      .forecast-preview { background: var(--mist); border-radius: 12px; padding: 22px; }
-      .barrow { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 10px; background: white; padding: 14px; margin-top: 12px; }
-      .bar { width: 42%; height: 9px; overflow: hidden; border-radius: 999px; background: var(--aqua); }
-      .bar span { display: block; height: 100%; border-radius: inherit; background: var(--sea); }
+      .card::before { content: ""; position: absolute; inset: 0 0 auto; height: 46%; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,.42), transparent); }
+      .card > * { position: relative; z-index: 1; }
+      .forecast-preview { border: 1px solid rgba(255,255,255,.84); background: linear-gradient(180deg, rgba(244,255,252,.82), rgba(222,248,244,.62)); border-radius: 20px; padding: 22px; box-shadow: inset 0 1px 0 white, 0 12px 30px rgba(42, 130, 133, .08); }
+      .barrow { display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid rgba(255,255,255,.82); border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(246,255,253,.78)); padding: 14px; margin-top: 12px; box-shadow: inset 0 1px 0 white; }
+      .bar { width: 42%; height: 11px; overflow: hidden; border-radius: 999px; background: linear-gradient(180deg, #dcfbf7, #bdeee8); box-shadow: inset 0 2px 4px rgba(17,123,123,.12); }
+      .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(180deg, #55e1d1, var(--sea)); box-shadow: inset 0 1px 0 rgba(255,255,255,.55); }
       .features, .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
-      .feature { border-radius: 10px; background: white; padding: 18px; }
+      .feature { border: 1px solid rgba(255,255,255,.82); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.9), rgba(239,255,252,.68)); padding: 18px; box-shadow: inset 0 1px 0 white, 0 10px 28px rgba(35, 112, 117, .07); }
       .feature strong { display: block; margin-bottom: 8px; }
       .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
       .panel-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
@@ -105,33 +148,39 @@
       .dashboard-grid { display: grid; gap: 18px; }
       .forecast-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
       .score-track { margin-top: 18px; }
-      .score-bar { height: 12px; overflow: hidden; border-radius: 999px; background: linear-gradient(90deg, #dff5df 0 25%, #fff0a7 25% 50%, #ffd3a3 50% 75%, #ffd3cf 75%); }
+      .score-bar { height: 14px; overflow: hidden; border-radius: 999px; background: linear-gradient(90deg, #dff5df 0 25%, #fff0a7 25% 50%, #ffd3a3 50% 75%, #ffd3cf 75%); box-shadow: inset 0 2px 5px rgba(32, 93, 99, .14); }
       .score-fill { height: 100%; border-radius: inherit; background: var(--sea); }
-      .forecast-card.stable { border-color: rgba(69, 164, 94, .28); }
-      .forecast-card.stable { background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(231,243,232,.7)); color: var(--ink); }
-      .forecast-card.watch { border-color: rgba(232, 183, 35, .38); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,248,209,.72)); }
-      .forecast-card.elevated { border-color: rgba(255, 154, 60, .38); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,235,214,.72)); }
-      .forecast-card.high { border-color: rgba(232, 117, 97, .42); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,225,221,.74)); }
-      .score-fill.stable { background: #2f9f68; }
-      .score-fill.watch { background: #e1b52e; }
-      .score-fill.elevated { background: #ef8b31; }
-      .score-fill.high { background: #d94f47; }
+      .forecast-card.stable { border-color: rgba(69, 164, 94, .3); background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(223,250,231,.72)); color: var(--ink); }
+      .forecast-card.watch { border-color: rgba(232, 183, 35, .42); background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(255,249,198,.76)); }
+      .forecast-card.elevated { border-color: rgba(255, 154, 60, .42); background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(255,227,196,.75)); }
+      .forecast-card.high { border-color: rgba(232, 117, 97, .46); background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(255,218,213,.78)); }
+      .score-fill.stable { background: linear-gradient(180deg, #6fdc8e, #2f9f68); }
+      .score-fill.watch { background: linear-gradient(180deg, #ffe46c, #d8aa1e); }
+      .score-fill.elevated { background: linear-gradient(180deg, #ffc37d, #ef8b31); }
+      .score-fill.high { background: linear-gradient(180deg, #ff8f82, #d94f47); }
       .score-axis { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: 11px; font-weight: 800; }
       .forecast-meta { display: grid; gap: 8px; margin-top: 14px; color: var(--muted); font-size: 14px; line-height: 1.55; }
       .chart-wrap { position: relative; }
       .chart-caption { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; }
-      .pill { display: inline-flex; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 900; }
-      .stable { background: var(--sage); color: #22613d; }
-      .watch { background: #fff1a8; color: #766000; }
-      .elevated { background: #ffe0bd; color: #935011; }
-      .high { background: rgba(232, 117, 97, 0.18); color: #b43b32; }
+      .pill { display: inline-flex; border: 1px solid rgba(255,255,255,.8); border-radius: 999px; padding: 7px 12px; font-size: 12px; font-weight: 900; box-shadow: inset 0 1px 0 rgba(255,255,255,.82), 0 6px 18px rgba(35, 117, 122, .08); }
+      .stable { background: linear-gradient(180deg, #f4fff4, var(--sage)); color: #22613d; }
+      .watch { background: linear-gradient(180deg, #fffbd6, #fff1a8); color: #766000; }
+      .elevated { background: linear-gradient(180deg, #fff0dc, #ffe0bd); color: #935011; }
+      .high { background: linear-gradient(180deg, #ffe8e4, rgba(232, 117, 97, 0.18)); color: #b43b32; }
       .two { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 18px; }
       .forecast-layout { display: grid; grid-template-columns: 0.76fr 1.24fr; gap: 34px; align-items: center; }
+      .manual-forecast-layout { grid-template-columns: minmax(320px, 440px) minmax(0, 1fr); align-items: stretch; gap: 28px; }
+      .manual-forecast-layout .signal-panel { display: flex; min-height: auto; flex-direction: column; justify-content: space-between; }
+      .manual-driver-copy { display: grid; align-content: center; gap: 18px; min-width: 0; }
+      .manual-driver-heading { max-width: 880px; margin: 0; font-size: clamp(34px, 4vw, 58px); line-height: 1.05; letter-spacing: -0.02em; }
       .signal-panel {
         min-height: 0;
-        border-radius: 28px;
-        background: linear-gradient(180deg, #ffffff, #f3faf8);
-        box-shadow: 0 24px 70px rgba(24, 48, 51, 0.12);
+        border: 1px solid rgba(255,255,255,.92);
+        border-radius: 32px;
+        background:
+          radial-gradient(circle at 20% 0%, rgba(255,255,255,.92), transparent 36%),
+          linear-gradient(180deg, rgba(255,255,255,.88), rgba(232,255,251,.7));
+        box-shadow: 0 28px 76px rgba(28, 102, 110, 0.14), inset 0 1px 0 white;
         padding: 26px;
       }
       .ring {
@@ -141,7 +190,8 @@
         display: grid;
         place-items: center;
         border-radius: 999px;
-        background: conic-gradient(var(--sea) calc(var(--score) * 1%), #dfeeed 0);
+        background: conic-gradient(#39d2c3 calc(var(--score) * 1%), #dff3f1 0);
+        box-shadow: inset 0 8px 18px rgba(17,123,123,.08), 0 18px 42px rgba(25, 126, 130, .12);
       }
       .ring-inner {
         display: grid;
@@ -149,42 +199,50 @@
         width: 104px;
         height: 104px;
         border-radius: inherit;
-        background: white;
+        background: linear-gradient(180deg, white, #f7fffd);
+        box-shadow: inset 0 1px 0 white, 0 6px 16px rgba(29, 113, 119, .08);
         text-align: center;
       }
       .ring-inner b { font-size: 42px; line-height: 1; }
       .ring-inner small { display: block; margin-top: 6px; line-height: 1.25; color: var(--ink); }
       .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-      .mini { border-radius: 14px; background: white; padding: 12px; box-shadow: 0 10px 30px rgba(24, 48, 51, 0.08); }
+      .mini { border: 1px solid rgba(255,255,255,.86); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,255,252,.72)); padding: 12px; box-shadow: 0 12px 32px rgba(24, 48, 51, 0.08), inset 0 1px 0 white; }
       .mini small { color: var(--muted); font-weight: 800; }
       .mini b { display: block; margin-top: 6px; font-size: 22px; }
-      .driver-list li { display: grid; grid-template-columns: 38px 1fr; align-items: center; gap: 12px; background: rgba(255,255,255,0.82); box-shadow: 0 10px 32px rgba(24, 48, 51, 0.07); }
-      .driver-list span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--aqua); color: var(--sea); font-weight: 900; }
+      .driver-list li { display: grid; grid-template-columns: 38px 1fr; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,.8); background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(242,255,252,.68)); box-shadow: 0 12px 34px rgba(24, 48, 51, 0.08), inset 0 1px 0 white; }
+      .driver-list span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(180deg, #eafffb, var(--aqua)); color: var(--sea); font-weight: 900; box-shadow: inset 0 1px 0 white; }
       .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
-      .resource-card { display: block; border-radius: 14px; background: var(--mist); padding: 16px; color: var(--ink); text-decoration: none; }
-      .resource-card:hover { background: var(--aqua); }
+      .resource-card { display: block; border: 1px solid rgba(255,255,255,.84); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(236,255,252,.7)); padding: 16px; color: var(--ink); text-decoration: none; box-shadow: inset 0 1px 0 white, 0 10px 26px rgba(32, 115, 120, .07); }
+      .resource-card:hover { background: linear-gradient(180deg, white, var(--aqua)); transform: translateY(-1px); }
       .resource-card strong { display: block; margin-bottom: 6px; }
-      .step-list li { background: white; box-shadow: 0 10px 32px rgba(24, 48, 51, 0.06); }
+      .step-list li { border: 1px solid rgba(255,255,255,.82); background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(241,255,252,.76)); box-shadow: 0 12px 32px rgba(24, 48, 51, 0.07), inset 0 1px 0 white; }
       ol, ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
-      li { border-radius: 10px; background: var(--mist); padding: 14px; }
+      li { border: 1px solid rgba(255,255,255,.72); border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(240,255,252,.58)); padding: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,.78); }
       .chart { width: 100%; height: 260px; }
       .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 22px; }
       label { display: grid; gap: 8px; font-weight: 800; }
       input[type="range"] { width: 100%; accent-color: var(--sea); }
       input, select, textarea {
-        border: 1px solid var(--line);
-        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,.92);
+        border-radius: 16px;
         padding: 12px;
-        background: white;
+        background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(241,255,252,.82));
+        box-shadow: inset 0 2px 8px rgba(19, 105, 112, .07), 0 1px 0 rgba(255,255,255,.8);
+        color: var(--ink);
+      }
+      input:focus, select:focus, textarea:focus {
+        outline: 2px solid rgba(61, 216, 199, .42);
+        box-shadow: 0 0 0 5px rgba(190,248,238,.36), inset 0 2px 8px rgba(19, 105, 112, .07);
       }
       textarea { min-height: 120px; resize: vertical; }
-      .uploadbox { margin-top: 22px; border: 2px dashed rgba(20, 124, 123, 0.3); border-radius: 12px; background: var(--mist); padding: 34px; text-align: center; }
-      .notice { margin-top: 18px; border-radius: 10px; background: var(--sage); padding: 14px; color: var(--ink); }
-      .warning { margin-top: 18px; border-radius: 10px; background: rgba(232, 117, 97, 0.12); padding: 14px; color: var(--ink); }
-      .manual { margin-top: 18px; border-radius: 10px; background: #fff7df; padding: 14px; color: var(--ink); }
+      .uploadbox { margin-top: 22px; border: 2px dashed rgba(30, 164, 158, 0.36); border-radius: 22px; background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(224,255,250,.6)); padding: 34px; text-align: center; box-shadow: inset 0 1px 0 white; }
+      .notice { margin-top: 18px; border: 1px solid rgba(255,255,255,.78); border-radius: 18px; background: linear-gradient(180deg, rgba(244,255,244,.92), rgba(224,247,226,.78)); padding: 14px; color: var(--ink); box-shadow: inset 0 1px 0 white; }
+      .warning { margin-top: 18px; border: 1px solid rgba(255,255,255,.72); border-radius: 18px; background: linear-gradient(180deg, #fff1ed, rgba(232, 117, 97, 0.12)); padding: 14px; color: var(--ink); box-shadow: inset 0 1px 0 white; }
+      .manual { margin-top: 18px; border: 1px solid rgba(255,255,255,.78); border-radius: 18px; background: linear-gradient(180deg, #fffdf0, #fff7df); padding: 14px; color: var(--ink); box-shadow: inset 0 1px 0 white; }
       footer { padding: 34px 0; color: var(--muted); font-size: 14px; }
       @media (max-width: 860px) {
         .hero, .two, .summary, .forecast-cards, .features, .grid3, .form-grid, .forecast-layout, .resource-grid { grid-template-columns: 1fr; }
+        .manual-driver-heading { font-size: 36px; }
         h1 { font-size: 42px; }
       }
     </style>
@@ -192,7 +250,7 @@
   <body>
     <header>
       <nav>
-        <div class="brand"><span class="logo"><span>MR</span></span> MindRhythm</div>
+        <div class="brand"><span class="logo" aria-label="MindRhythm logo"><span class="logo-bar"></span><span class="logo-bar"></span><span class="logo-bar"></span></span> MindRhythm</div>
         <div class="navlinks">
           <button data-view="home">Home</button>
           <button data-view="upload">Upload</button>
@@ -605,6 +663,37 @@
         };
         return { score, label, drivers, stress, mood, workload, energy, sleepHours, sleepQuality, parts };
       }
+      function manualWindowForecast(checkIns, days, mult, windowLabel) {
+        const recent = checkIns.slice(-Math.max(1, Math.min(days, checkIns.length)));
+        const stress = avg(recent.map((c) => c.stress));
+        const mood = avg(recent.map((c) => c.mood));
+        const workload = avg(recent.map((c) => c.workload));
+        const energy = avg(recent.map((c) => c.energy));
+        const sleepEntries = sleepCheckIns(recent);
+        const sleepHours = avg(sleepEntries.map((c) => c.sleepHours));
+        const sleepQuality = avg(sleepEntries.map((c) => c.sleepQuality));
+        const social = avg(recent.map((c) => c.socialConnection === "low" ? 1 : c.socialConnection === "medium" ? 0.35 : 0));
+        const overwhelmed = recent.length ? recent.filter((c) => c.overwhelmed).length / recent.length : 0;
+        const sleepDurationRisk = sleepHours ? clamp((7 - sleepHours) / 3, 0, 1) : 0;
+        const sleepQualityRisk = sleepQuality ? clamp((7 - sleepQuality) / 6, 0, 1) : 0;
+        const stressRisk = clamp((stress - 4) / 6, 0, 1);
+        const moodRisk = clamp((7 - mood) / 6, 0, 1);
+        const workloadRisk = clamp((workload - 5) / 5, 0, 1);
+        const energyRisk = clamp((7 - energy) / 6, 0, 1);
+        const causes = [
+          ["Sleep duration", sleepHours ? `Manual sleep average is ${fmtDecimalHours(sleepHours)}.` : "Manual sleep duration has not been entered yet.", sleepDurationRisk * 18],
+          ["Sleep quality", sleepQuality ? `Manual sleep quality is averaging ${sleepQuality.toFixed(1)}/10.` : "Manual sleep quality has not been entered yet.", sleepQualityRisk * 10],
+          ["Stress", `Stress is averaging ${stress.toFixed(1)}/10.`, stressRisk * 20],
+          ["Mood", `Mood is averaging ${mood.toFixed(1)}/10.`, moodRisk * 18],
+          ["Workload", `Workload is averaging ${workload.toFixed(1)}/10.`, workloadRisk * 16],
+          ["Energy and connection", "Energy, connection, and overwhelm are contributing to the manual signal.", (energyRisk * 0.58 + social * 0.25 + overwhelmed * 0.17) * 16]
+        ].filter((c) => c[2] > 1).sort((a, b) => b[2] - a[2]);
+        const score = Math.round(clamp(causes.reduce((sum, cause) => sum + cause[2], 0) * mult));
+        const label = score >= 75 ? "High Instability" : score >= 52 ? "Elevated Instability" : score >= 28 ? "Watch Zone" : "Stable";
+        const horizon = windowLabel === "24 hours" ? "latest manual check-in" : windowLabel === "48 hours" ? "recent manual check-in trend" : "next 72-hour manual outlook";
+        const explanation = causes[0] ? causes[0][1] : "Manual check-ins are close to the baseline you entered.";
+        return { window: windowLabel, score, label, causes, explanation, horizon };
+      }
       function manualNextSteps(result) {
         const steps = [];
         if (result.sleepHours && result.sleepHours < 7) steps.push(["Protect sleep first", "Set tonight's target sleep window and move one late-night task out of it before the evening starts."]);
@@ -628,89 +717,73 @@
       function renderManualDashboard(root, checkIns) {
         const result = manualForecast(checkIns);
         const confidence = manualConfidence(checkIns);
-        const typicalManualSleep = avg(sleepCheckIns(checkIns).map((c) => c.sleepHours));
-        const manualSleepCount = sleepCheckIns(checkIns).length;
-        const drivers = result.drivers.length ? result.drivers : [["Check-in pattern", "Your saved check-ins are not showing a clear instability signal yet.", 1]];
+        const manualSleepEntries = sleepCheckIns(checkIns);
+        const typicalManualSleep = avg(manualSleepEntries.map((c) => c.sleepHours));
+        const manualSleepCount = manualSleepEntries.length;
+        const forecasts = [
+          manualWindowForecast(checkIns, 1, 1, "24 hours"),
+          manualWindowForecast(checkIns, 3, 1.12, "48 hours"),
+          manualWindowForecast(checkIns, 3, 1.22, "72 hours")
+        ];
+        const topCauses = forecasts[2].causes.slice(0, 4);
+        const topCauseItems = topCauses.length ? topCauses : [["Current pattern", "Manual check-ins are not showing a clear instability signal yet.", 1]];
         const nextSteps = manualNextSteps(result);
+        const lastCheckIn = checkIns.at(-1)?.date || "None yet";
         root.innerHTML = `
           <div class="dashboard-grid">
-            <div class="panel-title">
-              <div><div class="eyebrow">Manual-only mode</div><h2>Stability forecast from check-ins</h2><p>No Apple Health XML is loaded, so typical sleep comes only from saved manual sleep entries.</p></div>
-              <div class="actions" style="margin:0"><button class="primary" data-view="checkin">Add Check-In</button><button class="secondary" onclick="localStorage.clear(); renderDashboard()">Clear data</button></div>
-            </div>
+            <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><div class="eyebrow">Manual baseline ready</div><h2>Mental Stability Forecast</h2></div><div class="actions" style="margin:0"><button class="primary" data-view="checkin">Add Check-In</button><button class="secondary" onclick="localStorage.clear(); renderDashboard()">Clear data</button></div></div>
             <section class="card summary">
-              <div class="metric"><small>Manual baseline</small><b>${checkIns.length} check-ins</b></div>
+              <div class="metric"><small>Manual baseline</small><b>${checkIns.length} check-ins</b><p>Last check-in: ${lastCheckIn}</p></div>
+              <div class="metric"><small>Sleep data source</small><b>Manual</b><p>No Apple Health XML loaded.</p></div>
               <div class="metric"><small>Typical sleep</small><b>${fmtDecimalHours(typicalManualSleep)}</b><p>${manualSleepCount ? `Average of ${manualSleepCount} manual sleep check-ins.` : "Add sleep in Check-In to build this average."}</p></div>
               <div class="metric"><small>Forecast confidence</small><b>${confidence.score}%</b><p>Capped at 70% without Apple Health XML.</p></div>
-              <div class="metric"><small>Current status</small><b>${result.label}</b></div>
             </section>
-            <section class="forecast-layout card">
-              <div class="signal-panel">
-                <strong style="color:var(--sea)">MindRhythm</strong>
-                <h2>Stability forecast</h2>
-                <span class="pill ${result.score >= 75 ? "high" : result.score >= 52 ? "elevated" : result.score >= 28 ? "watch" : "stable"}">${result.label}</span>
-                <div class="ring" style="--score:${result.score}"><div class="ring-inner"><b>${result.score}</b><small>/100<br>instability signal</small></div></div>
-                <div class="mini-grid">
-                  <div class="mini"><small>Stress</small><b>${result.stress.toFixed(1)}</b></div>
-                  <div class="mini"><small>Mood</small><b>${result.mood.toFixed(1)}</b></div>
-                  <div class="mini"><small>Workload</small><b>${result.workload.toFixed(1)}</b></div>
-                  <div class="mini"><small>Sleep</small><b>${fmtDecimalHours(result.sleepHours)}</b></div>
-                </div>
-              </div>
-              <div>
-                <span class="pill watch">What is changing</span>
-                <h1 style="font-size:clamp(42px,5vw,74px)">See the drivers, then take a stabilizing next step.</h1>
-                <ul class="driver-list">${drivers.slice(0, 4).map((d, i) => `<li><span>${i + 1}</span><strong>${d[1]}</strong></li>`).join("")}</ul>
+            <section class="forecast-cards">${forecasts.map(forecastCard).join("")}</section>
+            <section class="two">
+              <div class="card"><h2>Top pattern changes</h2><ol>${topCauseItems.map((c, i) => `<li><strong>${i + 1}. ${c[0]}</strong><br>${c[1]}</li>`).join("")}</ol></div>
+              <div class="card">
+                <div class="panel-title"><div><h2>Stabilization plan</h2><p>Built from the strongest manual drivers, then optionally refined with OpenAI.</p></div><button class="secondary" id="ai-plan-btn">Generate AI plan</button></div>
+                <ul class="step-list" id="plan-list">${nextSteps.map((step) => `<li><strong>${step[0]}</strong><br>${step[1]}</li>`).join("")}</ul>
+                <p id="ai-plan-status" class="notice" style="display:none"></p>
+                <p class="warning">MindRhythm is not a diagnosis tool. If you feel unsafe or in crisis, contact emergency services, 988 in the U.S., or a trusted adult immediately.</p>
               </div>
             </section>
-            <section class="card">
-              <div class="panel-title"><div><h2>What the score means</h2><p>The /100 number is an instability signal. Higher means recent check-ins show more stress, lower mood, heavier workload, lower energy, or lower connection. It is not a diagnosis.</p></div></div>
-              <ul><li><strong>0-27 Stable:</strong> check-ins look steady.</li><li><strong>28-51 Watch Zone:</strong> some signals are changing.</li><li><strong>52-74 Elevated Instability:</strong> multiple signals are moving away from steady ranges.</li><li><strong>75-100 High Instability:</strong> recent check-ins suggest a stronger short-term support need.</li></ul>
+            <section class="two">
+              <div class="card"><h2>Manual sleep duration</h2><div class="chart-wrap"><canvas id="manual-sleep-chart" class="chart"></canvas></div><div class="chart-caption"><span>Saved check-ins</span><span>Hours asleep</span></div></div>
+              <div class="card"><h2>Forecast risk</h2><div class="chart-wrap"><canvas id="manual-risk-chart" class="chart"></canvas></div><div class="chart-caption"><span>24h / 48h / 72h</span><span>Instability score</span></div></div>
             </section>
             <section class="card">
-              <div class="panel-title"><div><h2>Next steps</h2><p>These are based on the strongest current drivers. They should change as your check-ins change.</p></div><button class="secondary" id="ai-plan-btn">Generate AI plan</button></div>
-              <ul class="step-list" id="plan-list">${nextSteps.map((step) => `<li><strong>${step[0]}</strong><br>${step[1]}</li>`).join("")}</ul>
-              <p id="ai-plan-status" class="notice" style="display:none"></p>
-            </section>
-            <section class="card">
-              <div class="panel-title"><div><h2>Accessible support resources</h2><p>These links leave MindRhythm and open trusted support resources.</p></div></div>
-              <div class="resource-grid">
-                <a class="resource-card" href="https://988lifeline.org/" target="_blank" rel="noreferrer"><strong>988 Lifeline</strong>Call, text, or chat 24/7 for free confidential support in the U.S.</a>
-                <a class="resource-card" href="https://www.cdc.gov/mental-health/living-with/index.html" target="_blank" rel="noreferrer"><strong>CDC stress guide</strong>Practical coping steps for stress, sleep, movement, and connection.</a>
-                <a class="resource-card" href="https://www.nimh.nih.gov/health/topics/caring-for-your-mental-health" target="_blank" rel="noreferrer"><strong>NIMH self-care</strong>Evidence-informed mental health self-care basics and when to seek help.</a>
-              </div>
-            </section>
-            <section class="card">
-              <div class="panel-title"><div><h2>How confidence is calculated</h2><p>Confidence answers: how much should the user trust this forecast right now?</p></div><strong>${confidence.score}%</strong></div>
-              <ul>
-                <li><strong>Base manual signal: 10 points.</strong> A manual-only forecast starts low because there is no sleep history.</li>
-                <li><strong>Check-in history: ${confidence.countPoints} points.</strong> Up to 35 points for the first 7 saved check-ins.</li>
-                <li><strong>Recency: ${confidence.recencyPoints} points.</strong> Recent user-entered data improves confidence.</li>
-                <li><strong>Completeness: ${confidence.completenessPoints} points.</strong> Mood, stress, workload, energy, sleep, and connection all being filled in improves confidence.</li>
-                <li><strong>Manual sleep: ${confidence.sleepPoints} points.</strong> Up to 21 points for saved sleep duration entries.</li>
-                <li><strong>Manual cap: 70%.</strong> It cannot go higher until Apple Health sleep history is uploaded, because the app should not pretend manual data is the same as longitudinal wearable data.</li>
-              </ul>
+              <h2>Data Richness: Manual</h2>
+              <p>Manual baseline detected. The app uses only what you entered: mood, stress, workload, energy, sleep duration, sleep quality, connection, and overwhelm. Confidence is capped at 70% because no longitudinal Apple Health sleep history is loaded.</p>
             </section>
           </div>`;
         bindAIPlan({
           mode: "manual",
-          forecast: { score: result.score, label: result.label },
+          forecasts: forecasts.map((f) => ({ window: f.window, score: f.score, label: f.label, explanation: f.explanation })),
           typicalSleepHours: typicalManualSleep || null,
-          drivers: drivers.slice(0, 4).map((d) => ({ name: d[0], detail: d[1] })),
+          drivers: topCauseItems.map((d) => ({ name: d[0], detail: d[1] })),
           latestCheckIns: checkIns.slice(-5)
         });
         root.querySelector("[data-view='checkin']")?.addEventListener("click", () => show("checkin"));
+        if (manualSleepEntries.length) drawBars("manual-sleep-chart", manualSleepEntries.slice(-14).map((c) => c.sleepHours), typicalManualSleep || 7, { unit: "h", labels: manualSleepEntries.slice(-14).map((c) => c.date.slice(5)), maxValue: 12 });
+        drawBars("manual-risk-chart", forecasts.map((f) => f.score), 50, { unit: "", labels: ["24h", "48h", "72h"], maxValue: 100 });
       }
       function drawBars(id, values, line, options = {}) {
         const canvas = document.getElementById(id), ctx = canvas.getContext("2d");
         const rect = canvas.getBoundingClientRect();
         canvas.width = rect.width * devicePixelRatio; canvas.height = rect.height * devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio);
         const w = rect.width, h = rect.height;
+        ctx.clearRect(0, 0, w, h);
+        if (!values.length) {
+          ctx.font = "14px Inter, system-ui, sans-serif";
+          ctx.fillStyle = "#587276";
+          ctx.fillText("Add manual sleep check-ins to build this chart.", 20, 42);
+          return;
+        }
         const pad = { left: 46, right: 18, top: 20, bottom: 42 };
         const plotW = w - pad.left - pad.right;
         const plotH = h - pad.top - pad.bottom;
         const max = options.maxValue || Math.ceil(Math.max(...values, line, 10) * 1.18);
-        ctx.clearRect(0, 0, w, h);
         ctx.font = "11px Inter, system-ui, sans-serif";
         ctx.fillStyle = "#587276";
         ctx.strokeStyle = "#dcebe8";
