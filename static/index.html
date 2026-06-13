@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MindRhythm</title>
+    <style>
+      :root {
+        --ink: #183033;
+        --muted: #587276;
+        --sea: #147c7b;
+        --aqua: #c9f6f1;
+        --sky: #bde7ff;
+        --mist: #f4fffc;
+        --sage: #e7f3e8;
+        --sun: #ffe98a;
+        --orange: #ffb25f;
+        --coral: #e87561;
+        --line: rgba(20, 124, 123, 0.16);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 9% 8%, rgba(255, 255, 255, 0.96), transparent 17rem),
+          radial-gradient(circle at 96% 16%, rgba(122, 200, 255, 0.38), transparent 20rem),
+          radial-gradient(circle at 82% 88%, rgba(255, 228, 121, 0.24), transparent 24rem),
+          radial-gradient(circle at 26% 76%, rgba(130, 241, 213, 0.26), transparent 18rem),
+          linear-gradient(125deg, #effff7 0%, #faffff 44%, #d7efff 100%);
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.92);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(235, 255, 252, 0.72));
+        backdrop-filter: blur(18px) saturate(1.35);
+      }
+      nav, main, footer { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
+      nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 16px; }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+      .logo {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.9);
+        border-radius: 15px;
+        color: white;
+        background:
+          radial-gradient(circle at 30% 22%, rgba(255,255,255,.95), rgba(255,255,255,.2) 18%, transparent 34%),
+          linear-gradient(145deg, #32c7bd, #0e7377 58%, #65b7ff);
+        box-shadow: inset 0 1px 12px rgba(255,255,255,.5), 0 14px 34px rgba(20,124,123,.28);
+      }
+      .logo::after { content: ""; position: absolute; inset: auto -8px -20px; height: 30px; background: rgba(255,255,255,.28); transform: rotate(-8deg); }
+      .logo span { position: relative; z-index: 1; letter-spacing: -0.08em; }
+      .navlinks { display: flex; gap: 8px; flex-wrap: wrap; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,0.72); }
+      .navlinks button { border: 0; background: transparent; color: var(--muted); border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 800; }
+      .navlinks button:hover, .navlinks button.active-tab { background: linear-gradient(180deg, #2fb8ad, var(--sea)); color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,.45); }
+      .view { display: none; padding: 42px 0; }
+      .view.active { display: block; }
+      .hero { min-height: calc(100vh - 86px); display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 42px; align-items: center; }
+      .eyebrow { color: var(--sea); font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+      h1 { margin: 14px 0 0; font-size: clamp(40px, 6vw, 68px); line-height: 1.02; letter-spacing: -0.02em; }
+      h2 { margin: 0; font-size: 26px; }
+      p { color: var(--muted); line-height: 1.65; }
+      .lead { max-width: 680px; font-size: 18px; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+      button, .button {
+        border: 0;
+        border-radius: 10px;
+        padding: 13px 18px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 160ms ease;
+      }
+      .primary { background: linear-gradient(180deg, #2fb8ad, var(--sea)); color: white; box-shadow: 0 16px 50px rgba(24, 48, 51, 0.08), inset 0 1px 0 rgba(255,255,255,.42); }
+      .primary:hover { background: var(--ink); }
+      .secondary { border: 1px solid rgba(255,255,255,.95); background: linear-gradient(180deg, white, #f0fffc); color: var(--sea); }
+      .secondary:hover { background: var(--aqua); }
+      .card {
+        border: 1px solid rgba(255, 255, 255, 0.96);
+        border-radius: 20px;
+        background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(244,255,252,.72));
+        box-shadow: 0 20px 60px rgba(24, 48, 51, 0.09), inset 0 1px 0 rgba(255,255,255,.85);
+        backdrop-filter: blur(15px) saturate(1.25);
+        padding: 22px;
+      }
+      .forecast-preview { background: var(--mist); border-radius: 12px; padding: 22px; }
+      .barrow { display: flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 10px; background: white; padding: 14px; margin-top: 12px; }
+      .bar { width: 42%; height: 9px; overflow: hidden; border-radius: 999px; background: var(--aqua); }
+      .bar span { display: block; height: 100%; border-radius: inherit; background: var(--sea); }
+      .features, .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+      .feature { border-radius: 10px; background: white; padding: 18px; }
+      .feature strong { display: block; margin-bottom: 8px; }
+      .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+      .panel-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+      .panel-title p { margin: 6px 0 0; }
+      .metric small { color: var(--muted); font-size: 12px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+      .metric b { display: block; margin-top: 8px; font-size: 27px; }
+      .dashboard-grid { display: grid; gap: 18px; }
+      .forecast-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .score-track { margin-top: 18px; }
+      .score-bar { height: 12px; overflow: hidden; border-radius: 999px; background: linear-gradient(90deg, #dff5df 0 25%, #fff0a7 25% 50%, #ffd3a3 50% 75%, #ffd3cf 75%); }
+      .score-fill { height: 100%; border-radius: inherit; background: var(--sea); }
+      .forecast-card.stable { border-color: rgba(69, 164, 94, .28); }
+      .forecast-card.stable { background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(231,243,232,.7)); color: var(--ink); }
+      .forecast-card.watch { border-color: rgba(232, 183, 35, .38); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,248,209,.72)); }
+      .forecast-card.elevated { border-color: rgba(255, 154, 60, .38); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,235,214,.72)); }
+      .forecast-card.high { border-color: rgba(232, 117, 97, .42); background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,225,221,.74)); }
+      .score-fill.stable { background: #2f9f68; }
+      .score-fill.watch { background: #e1b52e; }
+      .score-fill.elevated { background: #ef8b31; }
+      .score-fill.high { background: #d94f47; }
+      .score-axis { display: flex; justify-content: space-between; margin-top: 7px; color: var(--muted); font-size: 11px; font-weight: 800; }
+      .forecast-meta { display: grid; gap: 8px; margin-top: 14px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+      .chart-wrap { position: relative; }
+      .chart-caption { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; color: var(--muted); font-size: 12px; font-weight: 800; }
+      .pill { display: inline-flex; border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 900; }
+      .stable { background: var(--sage); color: #22613d; }
+      .watch { background: #fff1a8; color: #766000; }
+      .elevated { background: #ffe0bd; color: #935011; }
+      .high { background: rgba(232, 117, 97, 0.18); color: #b43b32; }
+      .two { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 18px; }
+      .forecast-layout { display: grid; grid-template-columns: 0.76fr 1.24fr; gap: 34px; align-items: center; }
+      .signal-panel {
+        min-height: 0;
+        border-radius: 28px;
+        background: linear-gradient(180deg, #ffffff, #f3faf8);
+        box-shadow: 0 24px 70px rgba(24, 48, 51, 0.12);
+        padding: 26px;
+      }
+      .ring {
+        width: 168px;
+        height: 168px;
+        margin: 22px auto 16px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: conic-gradient(var(--sea) calc(var(--score) * 1%), #dfeeed 0);
+      }
+      .ring-inner {
+        display: grid;
+        place-items: center;
+        width: 104px;
+        height: 104px;
+        border-radius: inherit;
+        background: white;
+        text-align: center;
+      }
+      .ring-inner b { font-size: 42px; line-height: 1; }
+      .ring-inner small { display: block; margin-top: 6px; line-height: 1.25; color: var(--ink); }
+      .mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+      .mini { border-radius: 14px; background: white; padding: 12px; box-shadow: 0 10px 30px rgba(24, 48, 51, 0.08); }
+      .mini small { color: var(--muted); font-weight: 800; }
+      .mini b { display: block; margin-top: 6px; font-size: 22px; }
+      .driver-list li { display: grid; grid-template-columns: 38px 1fr; align-items: center; gap: 12px; background: rgba(255,255,255,0.82); box-shadow: 0 10px 32px rgba(24, 48, 51, 0.07); }
+      .driver-list span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--aqua); color: var(--sea); font-weight: 900; }
+      .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+      .resource-card { display: block; border-radius: 14px; background: var(--mist); padding: 16px; color: var(--ink); text-decoration: none; }
+      .resource-card:hover { background: var(--aqua); }
+      .resource-card strong { display: block; margin-bottom: 6px; }
+      .step-list li { background: white; box-shadow: 0 10px 32px rgba(24, 48, 51, 0.06); }
+      ol, ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+      li { border-radius: 10px; background: var(--mist); padding: 14px; }
+      .chart { width: 100%; height: 260px; }
+      .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 22px; }
+      label { display: grid; gap: 8px; font-weight: 800; }
+      input[type="range"] { width: 100%; accent-color: var(--sea); }
+      input, select, textarea {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px;
+        background: white;
+      }
+      textarea { min-height: 120px; resize: vertical; }
+      .uploadbox { margin-top: 22px; border: 2px dashed rgba(20, 124, 123, 0.3); border-radius: 12px; background: var(--mist); padding: 34px; text-align: center; }
+      .notice { margin-top: 18px; border-radius: 10px; background: var(--sage); padding: 14px; color: var(--ink); }
+      .warning { margin-top: 18px; border-radius: 10px; background: rgba(232, 117, 97, 0.12); padding: 14px; color: var(--ink); }
+      .manual { margin-top: 18px; border-radius: 10px; background: #fff7df; padding: 14px; color: var(--ink); }
+      footer { padding: 34px 0; color: var(--muted); font-size: 14px; }
+      @media (max-width: 860px) {
+        .hero, .two, .summary, .forecast-cards, .features, .grid3, .form-grid, .forecast-layout, .resource-grid { grid-template-columns: 1fr; }
+        h1 { font-size: 42px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="brand"><span class="logo"><span>MR</span></span> MindRhythm</div>
+        <div class="navlinks">
+          <button data-view="home">Home</button>
+          <button data-view="upload">Upload</button>
+          <button data-view="checkin">Check-In</button>
+          <button data-view="dashboard">Dashboard</button>
+          <button data-view="privacy">Privacy</button>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section id="home" class="view active hero">
+        <div>
+          <div class="eyebrow">Privacy-first stability forecasting</div>
+          <h1>Catch routine instability before burnout hits.</h1>
+          <p class="lead">MindRhythm learns your personal sleep and stress baseline, then forecasts your mental health stability for the next 24, 48, and 72 hours.</p>
+          <div class="actions">
+            <button class="primary" data-view="upload">Upload Apple Health XML</button>
+            <button class="secondary" data-view="checkin">Manual Check-In</button>
+          </div>
+          <p class="notice">Your health data stays on your device. MindRhythm analyzes your file locally and does not upload raw Apple Health data.</p>
+        </div>
+        <div class="card">
+          <div class="forecast-preview">
+            <strong>Today's forecast</strong>
+            <span class="pill watch" style="float:right">Watch Zone</span>
+            <div class="barrow"><span>24 hours</span><div class="bar"><span style="width:42%"></span></div></div>
+            <div class="barrow"><span>48 hours</span><div class="bar"><span style="width:56%"></span></div></div>
+            <div class="barrow"><span>72 hours</span><div class="bar"><span style="width:70%"></span></div></div>
+          </div>
+          <div class="features">
+            <div class="feature"><strong>Personal Baseline</strong><p>Learns what normal looks like for you, not the average person.</p></div>
+            <div class="feature"><strong>Sleep + Mood Signals</strong><p>Combines sleep data with quick daily check-ins.</p></div>
+            <div class="feature"><strong>24/48/72 Forecast</strong><p>Identifies short-term instability risk and stabilization steps.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="upload" class="view">
+        <div class="card">
+          <div class="eyebrow">Local Apple Health parsing</div>
+          <h2>Upload Apple Health XML</h2>
+          <p>Your file is parsed in this browser. Raw health data is not uploaded.</p>
+          <label class="uploadbox">
+            <input id="xml-file" type="file" accept=".xml,text/xml" />
+            <strong>Choose export.xml</strong>
+            <p>MindRhythm will look for Apple Health sleep records and create nightly summaries.</p>
+          </label>
+          <p id="upload-status"></p>
+        </div>
+      </section>
+
+      <section id="checkin" class="view">
+        <form class="card" id="checkin-form">
+          <h2>How are you doing today?</h2>
+          <p>A quick, non-clinical check-in helps MindRhythm understand today's pattern.</p>
+          <div class="form-grid">
+            <label>Mood <span id="mood-v">7/10</span><input name="mood" type="range" min="1" max="10" value="7" /></label>
+            <label>Stress <span id="stress-v">4/10</span><input name="stress" type="range" min="1" max="10" value="4" /></label>
+            <label>Workload <span id="workload-v">5/10</span><input name="workload" type="range" min="1" max="10" value="5" /></label>
+            <label>Energy <span id="energy-v">7/10</span><input name="energy" type="range" min="1" max="10" value="7" /></label>
+            <label>Sleep last night <span id="sleepHours-v">7.5h</span><input name="sleepHours" type="range" min="0" max="12" step="0.25" value="7.5" data-display="hours" /></label>
+            <label>Sleep quality <span id="sleepQuality-v">7/10</span><input name="sleepQuality" type="range" min="1" max="10" value="7" /></label>
+          </div>
+          <div class="form-grid">
+            <label>Social connection <select name="social"><option>low</option><option selected>medium</option><option>high</option></select></label>
+            <label style="display:flex;align-items:center;gap:10px;margin-top:28px"><input name="overwhelmed" type="checkbox" /> Overwhelmed today</label>
+          </div>
+          <label style="margin-top:18px">Optional note <textarea name="note" placeholder="What did today feel like?"></textarea></label>
+          <button class="primary" style="margin-top:18px">Save check-in</button>
+        </form>
+      </section>
+
+      <section id="dashboard" class="view">
+        <div id="dashboard-content"></div>
+      </section>
+
+      <section id="privacy" class="view">
+        <div class="card">
+          <h2>Privacy and safety</h2>
+          <p class="lead">Your health data stays on your device. MindRhythm analyzes your file locally and does not upload raw Apple Health data.</p>
+          <div class="grid3">
+            <div class="feature"><strong>Local-first</strong><p>Summarized nightly metrics and check-ins are stored in browser localStorage.</p></div>
+            <div class="feature"><strong>Non-diagnostic</strong><p>MindRhythm forecasts stability, burnout risk, and routine instability. It does not diagnose conditions.</p></div>
+            <div class="feature"><strong>Crisis-safe</strong><p>If you feel unsafe or in crisis, contact emergency services, 988 in the U.S., or a trusted adult immediately.</p></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      MindRhythm is not medical advice and does not diagnose or treat mental health conditions. It helps users reflect on patterns in sleep, stress, and mood.
+    </footer>
+    <script>
+      const SLEEP_KEY = "mindrhythm.nightlyMetrics";
+      const CHECKIN_KEY = "mindrhythm.checkIns";
+      const $ = (sel) => document.querySelector(sel);
+      const clamp = (v, min = 0, max = 100) => Math.max(min, Math.min(max, v));
+      const avg = (a) => a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0;
+      const fmtHours = (m) => `${Math.floor(m / 60)}h ${Math.round(m % 60)}m`;
+      const fmtDecimalHours = (h) => h ? `${Math.floor(h)}h ${Math.round((h % 1) * 60)}m` : "Not enough data";
+      const sleepCheckIns = (checkIns) => checkIns.filter((c) => Number.isFinite(c.sleepHours) && c.sleepHours > 0);
+
+      function show(view) {
+        document.querySelectorAll(".view").forEach((el) => el.classList.toggle("active", el.id === view));
+        document.querySelectorAll(".navlinks button").forEach((el) => el.classList.toggle("active-tab", el.dataset.view === view));
+        if (view === "dashboard") renderDashboard();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      document.querySelectorAll("[data-view]").forEach((el) => el.addEventListener("click", () => show(el.dataset.view)));
+      show("home");
+
+      function parseAppleDate(v) {
+        return new Date(v.replace(/^(\d{4}-\d{2}-\d{2}) /, "$1T").replace(/ ([+-]\d{2})(\d{2})$/, "$1:$2"));
+      }
+      function sleepNightKey(value) {
+        const d = parseAppleDate(value);
+        if (d.getHours() < 12) d.setDate(d.getDate() - 1);
+        return d.toISOString().slice(0, 10);
+      }
+      $("#xml-file").addEventListener("change", async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        $("#upload-status").className = "notice";
+        $("#upload-status").textContent = "Reading XML locally...";
+        const xml = await file.text();
+        const doc = new DOMParser().parseFromString(xml, "text/xml");
+        const records = [...doc.querySelectorAll("Record[type='HKCategoryTypeIdentifierSleepAnalysis']")].map((node) => {
+          const startDate = node.getAttribute("startDate");
+          const endDate = node.getAttribute("endDate");
+          const value = node.getAttribute("value");
+          const minutes = (parseAppleDate(endDate) - parseAppleDate(startDate)) / 60000;
+          return { startDate, endDate, value, minutes };
+        }).filter((r) => r.startDate && r.endDate && r.minutes > 0);
+        if (!records.length) {
+          $("#upload-status").className = "warning";
+          $("#upload-status").textContent = "Could not find Apple Health sleep records in this file. Make sure you uploaded export.xml from Apple Health.";
+          return;
+        }
+        const groups = {};
+        records.forEach((r) => (groups[sleepNightKey(r.startDate)] ||= []).push(r));
+        const metrics = Object.entries(groups).map(([date, list]) => {
+          const total = (terms) => list.filter((r) => terms.some((t) => r.value.includes(t))).reduce((s, r) => s + r.minutes, 0);
+          const inBed = total(["InBed"]);
+          const asleep = total(["Asleep"]);
+          const awake = total(["Awake"]);
+          const start = Math.min(...list.map((r) => parseAppleDate(r.startDate).getTime()));
+          const end = Math.max(...list.map((r) => parseAppleDate(r.endDate).getTime()));
+          return {
+            date,
+            totalInBedMinutes: Math.round(inBed || asleep + awake),
+            totalAsleepMinutes: Math.round(asleep || inBed),
+            awakeMinutes: Math.round(awake),
+            sleepEfficiency: (asleep || inBed) / Math.max(inBed || asleep + awake, 1),
+            bedtime: new Date(start).toISOString(),
+            wakeTime: new Date(end).toISOString(),
+            awakeInterruptions: list.filter((r) => r.value.includes("Awake")).length,
+            richnessScore: list.some((r) => /REM|Deep|Core/.test(r.value)) ? 100 : list.some((r) => r.value.includes("Awake")) ? 60 : 30
+          };
+        }).sort((a, b) => a.date.localeCompare(b.date));
+        localStorage.setItem(SLEEP_KEY, JSON.stringify(metrics));
+        $("#upload-status").className = "notice";
+        $("#upload-status").textContent = `Baseline ready. We found ${metrics.length} nights.`;
+        show("dashboard");
+      });
+
+      document.querySelectorAll("input[type='range']").forEach((input) => {
+        const id = `${input.name}-v`;
+        input.addEventListener("input", () => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.textContent = input.dataset.display === "hours" ? `${Number(input.value).toFixed(2).replace(/\.00$/, "")}h` : `${input.value}/10`;
+        });
+      });
+      $("#checkin-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const date = new Date().toISOString().slice(0, 10);
+        const item = {
+          id: crypto.randomUUID(), date,
+          mood: Number(form.get("mood")), stress: Number(form.get("stress")),
+          workload: Number(form.get("workload")), energy: Number(form.get("energy")),
+          sleepHours: Number(form.get("sleepHours")), sleepQuality: Number(form.get("sleepQuality")),
+          socialConnection: form.get("social"), overwhelmed: Boolean(form.get("overwhelmed")),
+          note: form.get("note")
+        };
+        const checkIns = JSON.parse(localStorage.getItem(CHECKIN_KEY) || "[]");
+        checkIns.push(item);
+        localStorage.setItem(CHECKIN_KEY, JSON.stringify(checkIns));
+        show("dashboard");
+      });
+
+      function baseline(metrics, checkIns) {
+        const nights = metrics.length >= 21 ? metrics.slice(0, 14) : metrics.slice(0, Math.min(metrics.length, 14));
+        const dates = new Set(nights.map((n) => n.date));
+        const cis = checkIns.filter((c) => dates.has(c.date));
+        return {
+          sleep: avg(nights.map((n) => n.totalAsleepMinutes)),
+          efficiency: avg(nights.map((n) => n.sleepEfficiency)),
+          awake: avg(nights.map((n) => n.awakeInterruptions)),
+          mood: avg(cis.map((c) => c.mood)) || 7,
+          stress: avg(cis.map((c) => c.stress)) || 4,
+          workload: avg(cis.map((c) => c.workload)) || 5,
+          energy: avg(cis.map((c) => c.energy)) || 7
+        };
+      }
+      function forecast(metrics, checkIns, base, days, mult, windowLabel) {
+        const nights = metrics.slice(-days);
+        const cis = checkIns.slice(-Math.max(1, Math.min(days, checkIns.length)));
+        const recentSleepCheckIns = sleepCheckIns(cis);
+        const avgStress = avg(cis.map((c) => c.stress)) || base.stress;
+        const avgMood = avg(cis.map((c) => c.mood)) || base.mood;
+        const avgWorkload = avg(cis.map((c) => c.workload)) || base.workload;
+        const avgEnergy = avg(cis.map((c) => c.energy)) || base.energy;
+        const avgManualSleep = avg(recentSleepCheckIns.map((c) => c.sleepHours));
+        const avgSleepQuality = avg(recentSleepCheckIns.map((c) => c.sleepQuality));
+        const avgSocial = avg(cis.map((c) => c.socialConnection === "low" ? 1 : c.socialConnection === "medium" ? 0.35 : 0));
+        const appleSleepDrop = clamp((base.sleep - avg(nights.map((n) => n.totalAsleepMinutes))) / base.sleep, 0, 1);
+        const manualSleepDrop = avgManualSleep ? clamp((base.sleep / 60 - avgManualSleep) / Math.max(base.sleep / 60, 1), 0, 1) : 0;
+        const sleepDrop = Math.max(appleSleepDrop, manualSleepDrop);
+        const sleepQualityDrop = avgSleepQuality ? clamp((7 - avgSleepQuality) / 6, 0, 1) : 0;
+        const effDrop = clamp((base.efficiency - avg(nights.map((n) => n.sleepEfficiency))) / base.efficiency, 0, 1);
+        const stress = clamp((avgStress - base.stress) / 6, 0, 1);
+        const mood = clamp((base.mood - avgMood) / 6, 0, 1);
+        const workload = clamp((avgWorkload - base.workload) / 6, 0, 1);
+        const energy = clamp((base.energy - avgEnergy) / 6, 0, 1);
+        const causes = [
+          ["Sleep duration", `Recent sleep is ${Math.round(sleepDrop * 100)}% below your baseline.`, sleepDrop * 25],
+          ["Sleep quality", `Manual sleep quality is averaging ${avgSleepQuality ? avgSleepQuality.toFixed(1) : "not enough data"}/10.`, sleepQualityDrop * 10],
+          ["Sleep efficiency", `Efficiency is ${Math.round(effDrop * 100)}% below baseline.`, effDrop * 15],
+          ["Stress", `Recent stress average is ${Math.max(0, avgStress - base.stress).toFixed(1)} points above baseline.`, stress * 15],
+          ["Mood", `Recent mood average is ${Math.max(0, base.mood - avgMood).toFixed(1)} points below baseline.`, mood * 15],
+          ["Workload", "Workload pressure is trending above normal.", workload * 10],
+          ["Energy and connection", `Recent energy and social connection are below the baseline pattern.`, (energy * 0.7 + avgSocial * 0.3) * 5]
+        ].filter((c) => c[2] > 1).sort((a, b) => b[2] - a[2]);
+        const score = Math.round(clamp(causes.reduce((s, c) => s + c[2], 0) * mult));
+        const label = score >= 75 ? "High Instability" : score >= 52 ? "Elevated Instability" : score >= 28 ? "Watch Zone" : "Stable";
+        const window = windowLabel || `${days === 1 ? 24 : days === 3 ? 48 : 72} hours`;
+        const horizon = window === "24 hours" ? "latest check-in + last sleep night" : window === "48 hours" ? "recent 48-hour trend" : "next 72-hour outlook";
+        const explanation = explainForecast(window, { sleepDrop, sleepQualityDrop, effDrop, stress, mood, workload, energy, avgStress, avgMood, avgWorkload, avgEnergy, avgManualSleep });
+        return { window, score, label, causes, explanation, horizon };
+      }
+      function explainForecast(window, signal) {
+        if (window === "24 hours") {
+          if (signal.stress > 0) return `Latest check-in: stress is averaging ${signal.avgStress.toFixed(1)}/10, above your baseline range.`;
+          if (signal.sleepDrop > 0.08) return `Latest sleep signal is ${Math.round(signal.sleepDrop * 100)}% below baseline.`;
+          return "Latest sleep and check-in signals are close to baseline.";
+        }
+        if (window === "48 hours") {
+          if (signal.workload > 0 && signal.stress > 0) return `Recent 48-hour trend: stress is ${signal.avgStress.toFixed(1)}/10 and workload is ${signal.avgWorkload.toFixed(1)}/10.`;
+          if (signal.stress > 0) return `Recent 48-hour trend: stress is averaging ${signal.avgStress.toFixed(1)}/10.`;
+          if (signal.workload > 0) return `Recent 48-hour trend: workload is averaging ${signal.avgWorkload.toFixed(1)}/10.`;
+          if (signal.mood > 0) return `Short trend: recent mood is averaging ${signal.avgMood.toFixed(1)}/10.`;
+          return "Short trend is not showing a sustained drift yet.";
+        }
+        if (signal.sleepDrop > 0.08 || signal.energy > 0) return `72-hour outlook: sleep or energy is drifting from baseline.`;
+        if (signal.stress > 0) return `72-hour outlook: stress remains above baseline but stays in a low risk band.`;
+        return "72-hour outlook remains close to your baseline.";
+      }
+      function forecastCard(f) {
+        const tone = f.score >= 75 ? "high" : f.score >= 52 ? "elevated" : f.score >= 28 ? "watch" : "stable";
+        return `<article class="card forecast-card ${tone}"><span class="pill ${tone}">${f.label}</span><h2 style="margin-top:18px">${f.score}<small>/100</small></h2><strong>${f.window}</strong><div class="score-track"><div class="score-bar"><div class="score-fill ${tone}" style="width:${f.score}%"></div></div><div class="score-axis"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div></div><div class="forecast-meta"><span><strong>Lens:</strong> ${f.horizon}</span><span>${f.explanation}</span></div></article>`;
+      }
+      function stabilizationPlan(causes, forecasts) {
+        const steps = [];
+        const names = new Set(causes.map((c) => c[0]));
+        if (names.has("Sleep duration") || names.has("Sleep quality") || names.has("Sleep efficiency")) {
+          steps.push(["Protect tonight's sleep window", "Pick a realistic lights-out target and start a 30-minute wind-down with screens, caffeine, and heavy work closed."]);
+        }
+        if (names.has("Stress")) {
+          steps.push(["Lower the next pressure spike", "Write the one stressor you can shrink today, then choose: delay it, ask for help, or reduce the scope."]);
+        }
+        if (names.has("Workload")) {
+          steps.push(["Make tomorrow smaller", "Keep one required task, one optional task, and move everything else out of the forecast window."]);
+        }
+        if (names.has("Mood") || names.has("Energy and connection")) {
+          steps.push(["Add one recovery input", "Choose a low-friction recovery action: food, shower, short walk, sunlight, or a five-minute call/text with someone safe."]);
+        }
+        if (!steps.length) {
+          steps.push(["Keep the rhythm steady", "Your current signals are close to baseline. Add another check-in tomorrow so the forecast keeps learning without guessing."]);
+        }
+        const peak = Math.max(...forecasts.map((f) => f.score));
+        if (peak >= 52) steps.push(["Use more support if the signal keeps rising", "If this feels bigger than routine stress or you feel unsafe, call/text 988 in the U.S. or contact a trusted adult now."]);
+        return steps.slice(0, 4);
+      }
+      function bindAIPlan(context) {
+        const button = document.getElementById("ai-plan-btn");
+        const list = document.getElementById("plan-list");
+        const status = document.getElementById("ai-plan-status");
+        if (!button || !list || !status) return;
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          status.style.display = "block";
+          status.textContent = "Generating a stabilization plan...";
+          try {
+            const response = await fetch("/api/stabilization", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(context)
+            });
+            const data = await response.json();
+            const plan = Array.isArray(data.plan) ? data.plan.filter(Boolean) : [];
+            if (data.source === "openai" && plan.length) {
+              list.innerHTML = plan.map((step) => `<li>${step}</li>`).join("");
+              status.textContent = "Generated with OpenAI using the summarized forecast context.";
+            } else if (plan.length) {
+              status.textContent = "AI plan is not connected yet, so the local driver-based plan stayed in place.";
+            } else {
+              status.textContent = "No plan came back, so the local driver-based plan stayed in place.";
+            }
+          } catch (error) {
+            status.textContent = "Could not reach the plan endpoint. The local driver-based plan stayed in place.";
+          } finally {
+            button.disabled = false;
+          }
+        });
+      }
+      function renderDashboard() {
+        const storedMetrics = JSON.parse(localStorage.getItem(SLEEP_KEY) || "[]");
+        const checkIns = JSON.parse(localStorage.getItem(CHECKIN_KEY) || "[]");
+        const manualOnly = !storedMetrics.length && checkIns.length > 0;
+        const root = $("#dashboard-content");
+        if (manualOnly) {
+          renderManualDashboard(root, checkIns);
+          return;
+        }
+        const metrics = storedMetrics;
+        if (!metrics.length) {
+          root.innerHTML = `<div class="card" style="text-align:center"><h2>No dashboard data yet</h2><p>Use the Upload tab for Apple Health XML, then add manual check-ins from the Check-In tab.</p><div class="actions" style="justify-content:center"><button class="primary" data-view="upload">Go to Upload</button><button class="secondary" data-view="checkin">Go to Check-In</button></div></div>`;
+          root.querySelector("[data-view='checkin']")?.addEventListener("click", () => show("checkin"));
+          root.querySelector("[data-view='upload']")?.addEventListener("click", () => show("upload"));
+          return;
+        }
+        const base = baseline(metrics, checkIns);
+        const forecasts = [forecast(metrics, checkIns, base, 1, 1, "24 hours"), forecast(metrics, checkIns, base, 3, 1.12, "48 hours"), forecast(metrics, checkIns, base, 3, 1.22, "72 hours")];
+        const confidence = Math.round(clamp(clamp((metrics.length / 21) * 35, 0, 35) + 20 + clamp((checkIns.length / 7) * 20, 0, 20) + 20));
+        const topCauses = forecasts[2].causes.slice(0, 4);
+        const topCauseItems = topCauses.length ? topCauses : [["Current pattern", "No major driver is moving away from baseline right now.", 1]];
+        const planSteps = stabilizationPlan(topCauses, forecasts);
+        const lastCheckIn = checkIns.at(-1)?.date || "None yet";
+        const baselineNightCount = metrics.length >= 21 ? 14 : Math.min(metrics.length, 14);
+        const manualSleepEntries = sleepCheckIns(checkIns);
+        const manualSleepAverage = avg(manualSleepEntries.map((c) => c.sleepHours));
+        const manualSleepNote = manualSleepEntries.length ? `Manual sleep check-ins average ${fmtDecimalHours(manualSleepAverage)} across ${manualSleepEntries.length} entries.` : "Manual sleep average appears after check-ins include sleep.";
+        root.innerHTML = `
+          <div class="dashboard-grid">
+            <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><div class="eyebrow">Baseline ready</div><h2>Mental Stability Forecast</h2></div><div class="actions" style="margin:0"><button class="secondary" onclick="localStorage.clear(); renderDashboard()">Clear data</button></div></div>
+            <section class="card summary">
+              <div class="metric"><small>Apple Health baseline</small><b>${metrics.length} nights</b><p>Sleep-history count. This changes when you upload new XML.</p></div>
+              <div class="metric"><small>Manual check-ins</small><b>${checkIns.length}</b><p>Last check-in: ${lastCheckIn}</p></div>
+              <div class="metric"><small>Typical sleep</small><b>${fmtHours(base.sleep)}</b><p>Apple Health average from ${baselineNightCount} baseline nights. ${manualSleepNote}</p></div>
+              <div class="metric"><small>Forecast confidence</small><b>${confidence}%</b><p>Sleep nights + check-in completeness.</p></div>
+            </section>
+            <section class="forecast-cards">${forecasts.map(forecastCard).join("")}</section>
+            <section class="two">
+              <div class="card"><h2>Top pattern changes</h2><ol>${topCauseItems.map((c, i) => `<li><strong>${i + 1}. ${c[0]}</strong><br>${c[1]}</li>`).join("")}</ol></div>
+              <div class="card">
+                <div class="panel-title"><div><h2>Stabilization plan</h2><p>Built from the strongest drivers, then optionally refined with OpenAI.</p></div><button class="secondary" id="ai-plan-btn">Generate AI plan</button></div>
+                <ul class="step-list" id="plan-list">${planSteps.map((step) => `<li><strong>${step[0]}</strong><br>${step[1]}</li>`).join("")}</ul>
+                <p id="ai-plan-status" class="notice" style="display:none"></p>
+                <p class="warning">MindRhythm is not a diagnosis tool. If you feel unsafe or in crisis, contact emergency services, 988 in the U.S., or a trusted adult immediately.</p>
+              </div>
+            </section>
+            <section class="two">
+              <div class="card"><h2>Sleep duration</h2><div class="chart-wrap"><canvas id="sleep-chart" class="chart"></canvas></div><div class="chart-caption"><span>Recent nights</span><span>Hours asleep</span></div></div>
+              <div class="card"><h2>Forecast risk</h2><div class="chart-wrap"><canvas id="risk-chart" class="chart"></canvas></div><div class="chart-caption"><span>24h / 48h / 72h</span><span>Instability score</span></div></div>
+            </section>
+            <section class="card"><h2>Data Richness: Apple Health</h2><p>Apple Health sleep data detected. Manual check-ins are saved separately and now contribute mood, stress, workload, energy, sleep duration, and sleep quality signals.</p></section>
+          </div>`;
+        bindAIPlan({
+          mode: "apple-health",
+          baseline: { sleepMinutes: Math.round(base.sleep), stress: base.stress, mood: base.mood, workload: base.workload, energy: base.energy },
+          forecasts: forecasts.map((f) => ({ window: f.window, score: f.score, label: f.label, explanation: f.explanation })),
+          topDrivers: topCauseItems.map((c) => ({ name: c[0], detail: c[1] })),
+          latestCheckIns: checkIns.slice(-5)
+        });
+        drawBars("sleep-chart", metrics.slice(-14).map((m) => m.totalAsleepMinutes / 60), base.sleep / 60, { unit: "h", labels: metrics.slice(-14).map((m) => m.date.slice(5)) });
+        drawBars("risk-chart", forecasts.map((f) => f.score), 50, { unit: "", labels: ["24h", "48h", "72h"], maxValue: 100 });
+      }
+      function manualForecast(checkIns) {
+        const recent = checkIns.slice(-Math.max(1, Math.min(7, checkIns.length)));
+        const stress = avg(recent.map((c) => c.stress));
+        const mood = avg(recent.map((c) => c.mood));
+        const workload = avg(recent.map((c) => c.workload));
+        const energy = avg(recent.map((c) => c.energy));
+        const sleepEntries = sleepCheckIns(recent);
+        const sleepHours = avg(sleepEntries.map((c) => c.sleepHours));
+        const sleepQuality = avg(sleepEntries.map((c) => c.sleepQuality));
+        const social = avg(recent.map((c) => c.socialConnection === "low" ? 1 : c.socialConnection === "medium" ? 0.35 : 0));
+        const overwhelmed = recent.filter((c) => c.overwhelmed).length / recent.length;
+        const sleepDurationRisk = sleepHours ? clamp((7 - sleepHours) / 3, 0, 1) : 0;
+        const sleepQualityRisk = sleepQuality ? clamp((7 - sleepQuality) / 6, 0, 1) : 0;
+        const score = Math.round(clamp(((stress - 4) / 6) * 20 + ((7 - mood) / 6) * 18 + ((workload - 5) / 5) * 16 + ((7 - energy) / 6) * 14 + sleepDurationRisk * 18 + sleepQualityRisk * 10 + social * 6 + overwhelmed * 10));
+        const label = score >= 75 ? "High Instability" : score >= 52 ? "Elevated Instability" : score >= 28 ? "Watch Zone" : "Stable";
+        const drivers = [
+          ["Sleep", sleepHours && sleepHours < 7 ? `Sleep is averaging ${sleepHours.toFixed(1)} hours.` : "Sleep duration is near the steady range.", sleepDurationRisk * 3],
+          ["Sleep quality", sleepQuality && sleepQuality < 7 ? `Sleep quality is averaging ${sleepQuality.toFixed(1)}/10.` : "Sleep quality is near the steady range.", sleepQualityRisk * 3],
+          ["Stress", stress > 4 ? `Stress is averaging ${stress.toFixed(1)}/10.` : "Stress is not above the watch threshold.", Math.max(0, stress - 4)],
+          ["Mood", mood < 7 ? `Mood is averaging ${mood.toFixed(1)}/10.` : "Mood is near the steady range.", Math.max(0, 7 - mood)],
+          ["Workload", workload > 5 ? `Workload is averaging ${workload.toFixed(1)}/10.` : "Workload is not elevated.", Math.max(0, workload - 5)],
+          ["Energy", energy < 7 ? `Energy is averaging ${energy.toFixed(1)}/10.` : "Energy is near the steady range.", Math.max(0, 7 - energy)]
+        ].filter((d) => d[2] > 0).sort((a, b) => b[2] - a[2]);
+        const parts = {
+          stress: Math.max(0, ((stress - 4) / 6) * 26),
+          mood: Math.max(0, ((7 - mood) / 6) * 24),
+          workload: Math.max(0, ((workload - 5) / 5) * 20),
+          energy: Math.max(0, ((7 - energy) / 6) * 18),
+          sleepDuration: sleepDurationRisk * 18,
+          sleepQuality: sleepQualityRisk * 10,
+          social: social * 8,
+          overwhelmed: overwhelmed * 12
+        };
+        return { score, label, drivers, stress, mood, workload, energy, sleepHours, sleepQuality, parts };
+      }
+      function manualNextSteps(result) {
+        const steps = [];
+        if (result.sleepHours && result.sleepHours < 7) steps.push(["Protect sleep first", "Set tonight's target sleep window and move one late-night task out of it before the evening starts."]);
+        if (result.sleepQuality && result.sleepQuality < 6) steps.push(["Make sleep less noisy", "Pick one sleep-quality lever tonight: cooler room, charger away from bed, caffeine cutoff, or a 10-minute wind-down."]);
+        if (result.stress > 5) steps.push(["Lower the next hour's load", "Pick one task to delay, shorten, or ask help on. Write the replacement plan in one sentence."]);
+        if (result.workload > 6) steps.push(["Make tomorrow smaller", "Choose the one task that actually matters tomorrow. Move two nonessential tasks out of the day."]);
+        if (result.mood < 6) steps.push(["Add one connection point", "Send a low-pressure message to someone safe: 'Can I talk for a few minutes today?'"]);
+        if (result.energy < 6) steps.push(["Protect recovery time", "Block 30 minutes with no new inputs: food, shower, walk, stretching, or quiet rest."]);
+        if (!steps.length) steps.push(["Keep the baseline going", "Your check-in looks steady. Add another check-in tomorrow so the app can learn your pattern without guessing."]);
+        steps.push(["Use support if this feels bigger than routine stress", "If you feel unsafe, overwhelmed, or like you might hurt yourself, call or text 988 in the U.S. right now."]);
+        return steps.slice(0, 4);
+      }
+      function manualConfidence(checkIns) {
+        const countPoints = Math.min(checkIns.length, 7) * 5;
+        const recencyPoints = checkIns.length ? 10 : 0;
+        const completenessPoints = checkIns.filter((c) => c.mood && c.stress && c.workload && c.energy && c.sleepHours && c.sleepQuality && c.socialConnection).length === checkIns.length ? 10 : 0;
+        const sleepPoints = Math.min(sleepCheckIns(checkIns).length, 7) * 3;
+        const score = Math.round(clamp(10 + countPoints + recencyPoints + completenessPoints + sleepPoints, 0, 70));
+        return { score, countPoints, recencyPoints, completenessPoints, sleepPoints };
+      }
+      function renderManualDashboard(root, checkIns) {
+        const result = manualForecast(checkIns);
+        const confidence = manualConfidence(checkIns);
+        const typicalManualSleep = avg(sleepCheckIns(checkIns).map((c) => c.sleepHours));
+        const manualSleepCount = sleepCheckIns(checkIns).length;
+        const drivers = result.drivers.length ? result.drivers : [["Check-in pattern", "Your saved check-ins are not showing a clear instability signal yet.", 1]];
+        const nextSteps = manualNextSteps(result);
+        root.innerHTML = `
+          <div class="dashboard-grid">
+            <div class="panel-title">
+              <div><div class="eyebrow">Manual-only mode</div><h2>Stability forecast from check-ins</h2><p>No Apple Health XML is loaded, so typical sleep comes only from saved manual sleep entries.</p></div>
+              <div class="actions" style="margin:0"><button class="primary" data-view="checkin">Add Check-In</button><button class="secondary" onclick="localStorage.clear(); renderDashboard()">Clear data</button></div>
+            </div>
+            <section class="card summary">
+              <div class="metric"><small>Manual baseline</small><b>${checkIns.length} check-ins</b></div>
+              <div class="metric"><small>Typical sleep</small><b>${fmtDecimalHours(typicalManualSleep)}</b><p>${manualSleepCount ? `Average of ${manualSleepCount} manual sleep check-ins.` : "Add sleep in Check-In to build this average."}</p></div>
+              <div class="metric"><small>Forecast confidence</small><b>${confidence.score}%</b><p>Capped at 70% without Apple Health XML.</p></div>
+              <div class="metric"><small>Current status</small><b>${result.label}</b></div>
+            </section>
+            <section class="forecast-layout card">
+              <div class="signal-panel">
+                <strong style="color:var(--sea)">MindRhythm</strong>
+                <h2>Stability forecast</h2>
+                <span class="pill ${result.score >= 75 ? "high" : result.score >= 52 ? "elevated" : result.score >= 28 ? "watch" : "stable"}">${result.label}</span>
+                <div class="ring" style="--score:${result.score}"><div class="ring-inner"><b>${result.score}</b><small>/100<br>instability signal</small></div></div>
+                <div class="mini-grid">
+                  <div class="mini"><small>Stress</small><b>${result.stress.toFixed(1)}</b></div>
+                  <div class="mini"><small>Mood</small><b>${result.mood.toFixed(1)}</b></div>
+                  <div class="mini"><small>Workload</small><b>${result.workload.toFixed(1)}</b></div>
+                  <div class="mini"><small>Sleep</small><b>${fmtDecimalHours(result.sleepHours)}</b></div>
+                </div>
+              </div>
+              <div>
+                <span class="pill watch">What is changing</span>
+                <h1 style="font-size:clamp(42px,5vw,74px)">See the drivers, then take a stabilizing next step.</h1>
+                <ul class="driver-list">${drivers.slice(0, 4).map((d, i) => `<li><span>${i + 1}</span><strong>${d[1]}</strong></li>`).join("")}</ul>
+              </div>
+            </section>
+            <section class="card">
+              <div class="panel-title"><div><h2>What the score means</h2><p>The /100 number is an instability signal. Higher means recent check-ins show more stress, lower mood, heavier workload, lower energy, or lower connection. It is not a diagnosis.</p></div></div>
+              <ul><li><strong>0-27 Stable:</strong> check-ins look steady.</li><li><strong>28-51 Watch Zone:</strong> some signals are changing.</li><li><strong>52-74 Elevated Instability:</strong> multiple signals are moving away from steady ranges.</li><li><strong>75-100 High Instability:</strong> recent check-ins suggest a stronger short-term support need.</li></ul>
+            </section>
+            <section class="card">
+              <div class="panel-title"><div><h2>Next steps</h2><p>These are based on the strongest current drivers. They should change as your check-ins change.</p></div><button class="secondary" id="ai-plan-btn">Generate AI plan</button></div>
+              <ul class="step-list" id="plan-list">${nextSteps.map((step) => `<li><strong>${step[0]}</strong><br>${step[1]}</li>`).join("")}</ul>
+              <p id="ai-plan-status" class="notice" style="display:none"></p>
+            </section>
+            <section class="card">
+              <div class="panel-title"><div><h2>Accessible support resources</h2><p>These links leave MindRhythm and open trusted support resources.</p></div></div>
+              <div class="resource-grid">
+                <a class="resource-card" href="https://988lifeline.org/" target="_blank" rel="noreferrer"><strong>988 Lifeline</strong>Call, text, or chat 24/7 for free confidential support in the U.S.</a>
+                <a class="resource-card" href="https://www.cdc.gov/mental-health/living-with/index.html" target="_blank" rel="noreferrer"><strong>CDC stress guide</strong>Practical coping steps for stress, sleep, movement, and connection.</a>
+                <a class="resource-card" href="https://www.nimh.nih.gov/health/topics/caring-for-your-mental-health" target="_blank" rel="noreferrer"><strong>NIMH self-care</strong>Evidence-informed mental health self-care basics and when to seek help.</a>
+              </div>
+            </section>
+            <section class="card">
+              <div class="panel-title"><div><h2>How confidence is calculated</h2><p>Confidence answers: how much should the user trust this forecast right now?</p></div><strong>${confidence.score}%</strong></div>
+              <ul>
+                <li><strong>Base manual signal: 10 points.</strong> A manual-only forecast starts low because there is no sleep history.</li>
+                <li><strong>Check-in history: ${confidence.countPoints} points.</strong> Up to 35 points for the first 7 saved check-ins.</li>
+                <li><strong>Recency: ${confidence.recencyPoints} points.</strong> Recent user-entered data improves confidence.</li>
+                <li><strong>Completeness: ${confidence.completenessPoints} points.</strong> Mood, stress, workload, energy, sleep, and connection all being filled in improves confidence.</li>
+                <li><strong>Manual sleep: ${confidence.sleepPoints} points.</strong> Up to 21 points for saved sleep duration entries.</li>
+                <li><strong>Manual cap: 70%.</strong> It cannot go higher until Apple Health sleep history is uploaded, because the app should not pretend manual data is the same as longitudinal wearable data.</li>
+              </ul>
+            </section>
+          </div>`;
+        bindAIPlan({
+          mode: "manual",
+          forecast: { score: result.score, label: result.label },
+          typicalSleepHours: typicalManualSleep || null,
+          drivers: drivers.slice(0, 4).map((d) => ({ name: d[0], detail: d[1] })),
+          latestCheckIns: checkIns.slice(-5)
+        });
+        root.querySelector("[data-view='checkin']")?.addEventListener("click", () => show("checkin"));
+      }
+      function drawBars(id, values, line, options = {}) {
+        const canvas = document.getElementById(id), ctx = canvas.getContext("2d");
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * devicePixelRatio; canvas.height = rect.height * devicePixelRatio; ctx.scale(devicePixelRatio, devicePixelRatio);
+        const w = rect.width, h = rect.height;
+        const pad = { left: 46, right: 18, top: 20, bottom: 42 };
+        const plotW = w - pad.left - pad.right;
+        const plotH = h - pad.top - pad.bottom;
+        const max = options.maxValue || Math.ceil(Math.max(...values, line, 10) * 1.18);
+        ctx.clearRect(0, 0, w, h);
+        ctx.font = "11px Inter, system-ui, sans-serif";
+        ctx.fillStyle = "#587276";
+        ctx.strokeStyle = "#dcebe8";
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+          const value = (max / 4) * i;
+          const y = pad.top + plotH - (value / max) * plotH;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, y);
+          ctx.lineTo(w - pad.right, y);
+          ctx.stroke();
+          ctx.fillText(`${Math.round(value)}${options.unit || ""}`, 4, y + 4);
+        }
+        ctx.strokeStyle = "#8aa3a5";
+        ctx.beginPath();
+        ctx.moveTo(pad.left, pad.top);
+        ctx.lineTo(pad.left, pad.top + plotH);
+        ctx.lineTo(w - pad.right, pad.top + plotH);
+        ctx.stroke();
+        const gap = Math.min(10, plotW / Math.max(values.length * 3, 1));
+        const bw = (plotW - gap * (values.length - 1)) / Math.max(values.length, 1);
+        values.forEach((v, i) => {
+          const x = pad.left + i * (bw + gap);
+          const bh = (v / max) * plotH;
+          ctx.fillStyle = "#147c7b";
+          ctx.fillRect(x, pad.top + plotH - bh, bw, bh);
+          const label = options.labels?.[i];
+          if (label && (values.length <= 7 || i % Math.ceil(values.length / 7) === 0)) {
+            ctx.fillStyle = "#587276";
+            ctx.save();
+            ctx.translate(x + bw / 2, h - 20);
+            ctx.rotate(values.length > 7 ? -0.55 : 0);
+            ctx.textAlign = values.length > 7 ? "right" : "center";
+            ctx.fillText(label, 0, 0);
+            ctx.restore();
+          }
+        });
+        const y = pad.top + plotH - (line / max) * plotH;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = "#e87561";
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(w - pad.right, y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#e87561";
+        ctx.fillText("baseline", w - pad.right - 54, y - 6);
+      }
+    </script>
+  </body>
+</html>
