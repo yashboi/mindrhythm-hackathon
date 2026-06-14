@@ -98,9 +98,12 @@
       .navlinks { display: flex; gap: 8px; flex-wrap: wrap; padding: 7px; border: 1px solid rgba(255,255,255,.92); border-radius: 18px; background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(224,255,250,.52)); box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 10px 28px rgba(36, 126, 132, .08); }
       .navlinks button { border: 1px solid transparent; background: transparent; color: var(--muted); border-radius: 13px; padding: 10px 14px; cursor: pointer; font-weight: 900; }
       .navlinks button:hover, .navlinks button.active-tab { border-color: rgba(255,255,255,.88); background: linear-gradient(180deg, #5ee4d2, var(--sea)); color: white; box-shadow: inset 0 1px 0 rgba(255,255,255,.58), 0 8px 20px rgba(18,124,124,.22); }
+      .navlinks.nav-hidden { display: none; }
+      .brand { cursor: pointer; }
       .view { display: none; padding: 42px 0; }
       .view.active { display: block; }
-      .hero { min-height: calc(100vh - 86px); display: grid; grid-template-columns: 1.02fr 0.98fr; gap: 42px; align-items: center; }
+      .hero { min-height: calc(100vh - 86px); grid-template-columns: 1.02fr 0.98fr; gap: 42px; align-items: center; }
+      .view.active.hero { display: grid; }
       .eyebrow { color: var(--sea); font-size: 13px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
       h1 { margin: 14px 0 0; font-size: clamp(40px, 6vw, 68px); line-height: 1.02; letter-spacing: -0.02em; }
       h2 { margin: 0; font-size: 26px; }
@@ -250,7 +253,7 @@
   <body>
     <header>
       <nav>
-        <div class="brand"><span class="logo" aria-label="MindRhythm logo"><span class="logo-bar"></span><span class="logo-bar"></span><span class="logo-bar"></span></span> MindRhythm</div>
+        <div class="brand" data-view="home"><span class="logo" aria-label="MindRhythm logo"><span class="logo-bar"></span><span class="logo-bar"></span><span class="logo-bar"></span></span> MindRhythm</div>
         <div class="navlinks">
           <button data-view="home">Home</button>
           <button data-view="upload">Upload</button>
@@ -352,6 +355,21 @@
       const fmtDecimalHours = (h) => h ? `${Math.floor(h)}h ${Math.round((h % 1) * 60)}m` : "Not enough data";
       const sleepCheckIns = (checkIns) => checkIns.filter((c) => Number.isFinite(c.sleepHours) && c.sleepHours > 0);
 
+      // The top-right app nav stays hidden until a genuine Apple Health XML upload
+      // populates SLEEP_KEY; before that the user only sees the home/landing screen.
+      function hasAppleHealthData() {
+        try {
+          const metrics = JSON.parse(localStorage.getItem(SLEEP_KEY) || "[]");
+          return Array.isArray(metrics) && metrics.length > 0;
+        } catch {
+          return false;
+        }
+      }
+      function updateNav() {
+        const nav = document.querySelector(".navlinks");
+        if (nav) nav.classList.toggle("nav-hidden", !hasAppleHealthData());
+      }
+
       function show(view) {
         document.querySelectorAll(".view").forEach((el) => el.classList.toggle("active", el.id === view));
         document.querySelectorAll(".navlinks button").forEach((el) => el.classList.toggle("active-tab", el.dataset.view === view));
@@ -360,6 +378,7 @@
       }
       document.querySelectorAll("[data-view]").forEach((el) => el.addEventListener("click", () => show(el.dataset.view)));
       show("home");
+      updateNav();
 
       function parseAppleDate(v) {
         return new Date(v.replace(/^(\d{4}-\d{2}-\d{2}) /, "$1T").replace(/ ([+-]\d{2})(\d{2})$/, "$1:$2"));
@@ -412,6 +431,7 @@
         localStorage.setItem(SLEEP_KEY, JSON.stringify(metrics));
         $("#upload-status").className = "notice";
         $("#upload-status").textContent = `Baseline ready. We found ${metrics.length} nights.`;
+        updateNav();
         show("dashboard");
       });
 
@@ -438,7 +458,11 @@
         const checkIns = JSON.parse(localStorage.getItem(CHECKIN_KEY) || "[]");
         checkIns.push(item);
         localStorage.setItem(CHECKIN_KEY, JSON.stringify(checkIns));
-        show("dashboard");
+        if (hasAppleHealthData()) {
+          show("dashboard");
+        } else {
+          show("home");
+        }
       });
 
       function baseline(metrics, checkIns) {
@@ -595,7 +619,7 @@
         const manualSleepNote = manualSleepEntries.length ? `Manual sleep check-ins average ${fmtDecimalHours(manualSleepAverage)} across ${manualSleepEntries.length} entries.` : "Manual sleep average appears after check-ins include sleep.";
         root.innerHTML = `
           <div class="dashboard-grid">
-            <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><div class="eyebrow">Baseline ready</div><h2>Mental Stability Forecast</h2></div><div class="actions" style="margin:0"><button class="secondary" onclick="localStorage.clear(); renderDashboard()">Clear data</button></div></div>
+            <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><div class="eyebrow">Baseline ready</div><h2>Mental Stability Forecast</h2></div><div class="actions" style="margin:0"><button class="secondary" onclick="localStorage.clear(); updateNav(); show('home')">Clear data</button></div></div>
             <section class="card summary">
               <div class="metric"><small>Apple Health baseline</small><b>${metrics.length} nights</b><p>Sleep-history count. This changes when you upload new XML.</p></div>
               <div class="metric"><small>Manual check-ins</small><b>${checkIns.length}</b><p>Last check-in: ${lastCheckIn}</p></div>
