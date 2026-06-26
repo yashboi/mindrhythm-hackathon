@@ -1,31 +1,35 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: ["class"],
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}"
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        ink: "#183033",
-        muted: "#587276",
-        mist: "#f4faf8",
-        sea: "#147c7b",
-        aqua: "#d9f2ee",
-        sage: "#e7f3e8",
-        coral: "#e87561"
-      },
-      boxShadow: {
-        soft: "0 16px 50px rgba(24, 48, 51, 0.08)"
+        background: "#020617",
+        foreground: "#f8fafc",
+        primary: "#22d3ee",
+        "primary-foreground": "#020617",
+        accent: "#0f172a",
+        "accent-foreground": "#f8fafc",
+        destructive: "#ef4444",
+        "destructive-foreground": "#f8fafc",
+        border: "rgba(148, 163, 184, 0.16)",
+        input: "rgba(148, 163, 184, 0.20)",
+        ring: "#22d3ee",
+        secondary: "#1e293b",
+        "secondary-foreground": "#f8fafc",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"]
-      }
-    }
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas"],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };
 
 export default config;

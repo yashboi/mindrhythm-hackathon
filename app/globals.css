@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
+  --background: #020617;
+  --foreground: #f8fafc;
 }
 
 * {
@@ -11,24 +13,45 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  min-height: 100%;
+  background: var(--background);
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(217, 242, 238, 0.72), transparent 32rem),
-    linear-gradient(180deg, #f8fcfb 0%, #eef7f4 100%);
-  color: #183033;
+    radial-gradient(circle at 20% 0%, rgba(34, 211, 238, 0.08), transparent 32rem),
+    linear-gradient(180deg, #020617 0%, #050816 48%, #07111f 100%);
+  color: var(--foreground);
 }
 
 button,
 input,
-select,
-textarea {
+textarea,
+select {
   font: inherit;
 }
 
-.focus-ring {
-  @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sea;
+::selection {
+  background: rgba(34, 211, 238, 0.27);
+}
+
+.terminal-scroll {
+  scrollbar-color: #334155 #020617;
+  scrollbar-width: thin;
+}
+
+.terminal-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.terminal-scroll::-webkit-scrollbar-track {
+  background: #020617;
+}
+
+.terminal-scroll::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 999px;
 }

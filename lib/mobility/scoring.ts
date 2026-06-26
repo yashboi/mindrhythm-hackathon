@@ -1,0 +1,9 @@
+import type { MobilityLocation, MobilityMetric, MobilityTrend, RiskLevel } from "./types";
+const clamp=(n:number)=>Math.max(0,Math.min(100,n));
+export function calculateMobilityYieldScore(input:{medianIncome:number;rentBurden:number;jobAccessScore:number;transitAccessScore:number;schoolAccessScore:number;housingProductionIndex:number;commuteBurdenMinutes:number;displacementRiskScore:number;povertyPressureScore:number;}):number{const income=clamp((input.medianIncome/200000)*100);const rent=clamp(100-input.rentBurden*1.8);const commute=clamp(100-(input.commuteBurdenMinutes-15)*2.2);const displacement=clamp(100-input.displacementRiskScore);const poverty=clamp(100-input.povertyPressureScore);return Math.round(input.jobAccessScore*.18+input.schoolAccessScore*.14+input.transitAccessScore*.12+input.housingProductionIndex*.14+income*.12+rent*.12+commute*.08+displacement*.06+poverty*.04)}
+export function getRiskLevel(score:number):RiskLevel{return score>=85?"critical":score>=65?"high":score>=40?"medium":"low"}
+export function getTrendLabel(trend:MobilityTrend){return trend==="improving"?"IMPROVING":trend==="declining"?"DECLINING":"STABLE"}
+export function getMetricSignal(metric:MobilityMetric):"green"|"amber"|"red"|"blue"{if(metric.interpretation==="positive")return metric.direction==="up"?"green":"blue"; if(metric.interpretation==="negative")return metric.value>80||metric.direction==="up"?"red":"amber"; return "blue"}
+export const rankByDisplacementRisk=(locations:MobilityLocation[])=>[...locations].sort((a,b)=>b.displacementRiskScore-a.displacementRiskScore);
+export const rankByMobilityYield=(locations:MobilityLocation[])=>[...locations].sort((a,b)=>b.mobilityScore-a.mobilityScore);
+export function mobilityStatus(score:number){return score>=80?"strong":score>=65?"resilient":score>=50?"fragile":"failing"}

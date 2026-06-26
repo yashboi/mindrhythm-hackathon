@@ -1,0 +1,1 @@
+export function SourceBadge({name}:{name:string}){return <span className="inline-flex border border-slate-500/20 bg-slate-900/70 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">{name}</span>}
